@@ -3,6 +3,9 @@
 # Licensed under the MIT license.
 ###
 
+find = require 'core-js/library/fn/array/find'
+findIndex = require 'core-js/library/fn/array/find-index'
+
 defaults =
   commentList: false
 
@@ -71,6 +74,8 @@ HTML5Niconicoplayer = (options) ->
         chat.date = new Date parseInt(chatEl.getAttribute 'date') * 1000
         chat.thread = parseInt chatEl.getAttribute 'thread'
         chat.userId = chatEl.getAttribute 'user_id'
+        chat.mail = chatEl.getAttribute 'mail'
+        chat.styles = if chat.mail then chat.mail.split ' ' else []
         chat.vpos = parseInt chatEl.getAttribute 'vpos'
 
         chats.push chat
@@ -99,6 +104,24 @@ HTML5Niconicoplayer = (options) ->
           commentTimeEl.textContent = "#{minutes}:#{seconds}.#{centiSeconds}"
 
           commentEl.appendChild commentTimeEl
+
+          chat.listElement = commentEl
+
+      scrollCommentTo = (index) ->
+        if commentListEl
+          chat = chats[index]
+          commentListEl.scrollTop = chat.listElement.offsetTop
+
+      scrollCommentTime = (seconds) ->
+        if commentListEl
+          index = findIndex chats, (chat) -> chat.vpos > seconds * 100
+          scrollCommentTo index
+
+      setInterval ->
+        if not player.paused()
+          seconds = player.currentTime()
+          scrollCommentTime seconds
+      , 100
 
   return player
 
