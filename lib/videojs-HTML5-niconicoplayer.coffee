@@ -79,6 +79,8 @@ HTML5Niconicoplayer = (options) ->
     layoutedComment = 0
     layoutedFixedComment = 0
 
+    fixedComments = []
+
     videoEl.parentNode.insertBefore commentAreaEl, videoEl.nextSibling
 
     xhr.onload = ->
@@ -212,6 +214,97 @@ HTML5Niconicoplayer = (options) ->
         if chat.vpos / 100 < vpos + settings.commentPreTime
           layoutedComment = Math.max layoutedComment, chatIndex
 
+      layoutFixedComment = (chat, chatIndex) ->
+        vpos = player.currentTime()
+        videoWidth = player.width()
+        videoHeight = player.height()
+
+        if vpos - settings.commentTime < chat.vpos / 100 < vpos
+          displayTime = vpos - chat.vpos / 100
+
+          commentEl = document.createElement 'span'
+          commentEl.className = 'vjs-niconico-comment fixed'
+          commentEl.textContent = chat.text
+
+          commentHeight = settings.commentHeight
+
+          calcOverlap = (from, to) ->
+            sum = 0
+
+            for comment in fixedComments
+              overlapFrom = Math.max from, comment.from
+              overlapTo = Math.max to, comment.to
+
+              if overlapFrom < overlapTo
+                sum += overlapTo - overlapFrom
+
+            return sum
+
+          positionTop = null
+
+          if 'ue' in chat.styles
+            # Sort fixedComments out
+            fixedComments.sort (a, b) -> a.to - b.to
+
+            if calcOverlap(0, commentHeight) is 0
+              positionTop = 0
+            else
+              overlaps = []
+              for comment in fixedComments
+                overlap = calcOverlap comment.to, comment.to + commentHeight
+                overlaps.push overlap
+
+                if comment.to + commentHeight <= videoHeight and overlap is 0
+                  positionTop = comment.to
+                  break
+
+              if positionTop is null
+                minOverlap = Infinity
+                for overlap, index in overlaps
+                  if overlap < minOverlap
+                    minOverlap = overlap
+                    positionTop = fixedComments[index].to
+
+          else # shita
+            # Sort fixedComments out
+            fixedComments.sort (a, b) -> b.from - a.from
+
+            if calcOverlap(videoHeight - commentHeight, videoHeight) is 0
+              positionTop = videoHeight - commentHeight
+            else
+              overlaps = []
+              for comment in fixedComments
+                overlap = calcOverlap comment.from - commentHeight, comment.from
+                overlaps.push overlap
+
+                if comment.from - commentHeight >= 0 and overlap is 0
+                  positionTop = comment.from - commentHeight
+                  break
+
+              if positionTop is null
+                minOverlap = Infinity
+                for overlap, index in overlaps
+                  if overlap < minOverlap
+                    minOverlap = overlap
+                    positionTop = fixedComments[index].from - commentHeight
+
+          commentEl.dataset.index = chatIndex
+          commentEl.style.top = positionTop + 'px'
+
+          for color in colors
+            if color in chat.styles
+              commentEl.className += ' ' + color
+
+          commentAreaEl.appendChild commentEl
+
+          fixedComments.push
+            from: positionTop
+            to: positionTop + commentHeight
+            index: chatIndex
+
+        if chat.vpos / 100 < vpos
+          layoutedFixedComment = Math.max layoutedFixedComment, chatIndex
+
       layoutComments = ->
         commentAreaEl.innerHTML = ''
         lineEndTimes = (0 for i in [0...lineLength])
@@ -220,7 +313,10 @@ HTML5Niconicoplayer = (options) ->
         layoutedFixedComment = 0
 
         for chat, index in chats
-          layoutComment chat, index
+          if 'ue' in chat.styles or 'shita' in chat.styles
+            layoutFixedComment chat, index
+          else
+            layoutComment chat, index
 
       updateComment = ->
         vpos = player.currentTime()
@@ -229,26 +325,37 @@ HTML5Niconicoplayer = (options) ->
         removalPendingElements = []
 
         for commentEl in commentAreaEl.childNodes
-          chat = chats[commentEl.dataset.index]
-          if chat.vpos / 100 < vpos - settings.commentPostTime
-            removalPendingElements.push commentEl
+          index = parseInt commentEl.dataset.index
+          chat = chats[index]
+
+          if 'ue' in chat.styles or 'shita' in chat.styles
+            if chat.vpos / 100 < vpos - settings.commentTime
+              removalPendingElements.push commentEl
+              fixedComments = fixedComments.filter (comment) -> comment.index isnt index
+
           else
-            scrollTime = (vpos + settings.commentPreTime) - chat.vpos / 100
-            commentWidth = parseInt commentEl.dataset.width
-            scrollPath = videoWidth + commentWidth
+            if chat.vpos / 100 < vpos - settings.commentPostTime
+              removalPendingElements.push commentEl
+            else
+              scrollTime = (vpos + settings.commentPreTime) - chat.vpos / 100
+              commentWidth = parseInt commentEl.dataset.width
+              scrollPath = videoWidth + commentWidth
 
-            scrollOffset = scrollPath / settings.commentTime * scrollTime
-            commentOffset = videoWidth - scrollOffset
+              scrollOffset = scrollPath / settings.commentTime * scrollTime
+              commentOffset = videoWidth - scrollOffset
 
-            commentEl.style.left = commentOffset + 'px'
+              commentEl.style.left = commentOffset + 'px'
 
         for element in removalPendingElements
           element.parentNode.removeChild element
 
-        offset = layoutedComment
-
-        for chat, index in chats[offset + 1 ...]
-          layoutComment chat, offset + 1 + index
+        for chat, index in chats
+          if 'ue' in chat.styles or 'shita' in chat.styles
+            if index > layoutedFixedComment
+              layoutFixedComment chat, index
+          else
+            if index > layoutedComment
+              layoutComment chat, index
 
       player.on 'seeked', ->
         layoutComments()
