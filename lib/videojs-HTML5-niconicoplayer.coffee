@@ -233,7 +233,7 @@ HTML5Niconicoplayer = (options) ->
 
             for comment in fixedComments
               overlapFrom = Math.max from, comment.from
-              overlapTo = Math.max to, comment.to
+              overlapTo = Math.min to, comment.to
 
               if overlapFrom < overlapTo
                 sum += overlapTo - overlapFrom
@@ -243,6 +243,8 @@ HTML5Niconicoplayer = (options) ->
           positionTop = null
 
           if 'ue' in chat.styles
+            commentEl.className += ' ue'
+
             # Sort fixedComments out
             fixedComments.sort (a, b) -> a.to - b.to
 
@@ -261,11 +263,16 @@ HTML5Niconicoplayer = (options) ->
               if positionTop is null
                 minOverlap = Infinity
                 for overlap, index in overlaps
-                  if overlap < minOverlap
+                  if overlap < minOverlap and fixedComments[index].to + commentHeight <= videoHeight
                     minOverlap = overlap
                     positionTop = fixedComments[index].to
 
+                if positionTop is null
+                  positionTop = 0
+
           else # shita
+            commentEl.className += ' shita'
+
             # Sort fixedComments out
             fixedComments.sort (a, b) -> b.from - a.from
 
@@ -284,9 +291,12 @@ HTML5Niconicoplayer = (options) ->
               if positionTop is null
                 minOverlap = Infinity
                 for overlap, index in overlaps
-                  if overlap < minOverlap
+                  if overlap < minOverlap and fixedComments[index].from - commentHeight >= 0
                     minOverlap = overlap
                     positionTop = fixedComments[index].from - commentHeight
+
+                if positionTop is null
+                  positionTop = videoHeight - commentHeight
 
           commentEl.dataset.index = chatIndex
           commentEl.style.top = positionTop + 'px'
