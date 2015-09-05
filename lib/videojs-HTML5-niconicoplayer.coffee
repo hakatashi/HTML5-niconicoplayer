@@ -110,7 +110,8 @@ HTML5Niconicoplayer = (options) ->
       scrollCommentTo = (index) ->
         if commentListEl
           chat = chats[index]
-          commentListEl.scrollTop = chat.listElement.offsetTop
+          scrollTop = chat.listElement.offsetTop - commentListEl.offsetTop - commentListEl.offsetHeight
+          commentListEl.scrollTop = Math.max 0, scrollTop
 
       scrollCommentTime = (seconds) ->
         if commentListEl
