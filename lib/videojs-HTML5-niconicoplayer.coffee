@@ -34,7 +34,7 @@ HTML5Niconicoplayer = (options) ->
 
   for trackEl in trackEls
     # TODO: IE compat
-    if trackEl.classList.contains 'vjs-niconico-comment'
+    if trackEl.classList.contains 'vjs-niconico-comment-file'
       commentEls.push trackEl
 
   if commentEls.length is 0
@@ -57,8 +57,6 @@ HTML5Niconicoplayer = (options) ->
     commentAreaEl.className = 'vjs-niconico-comment-area'
 
     videoEl.parentNode.insertBefore commentAreaEl, videoEl.nextSibling
-
-    console.log commentAreaEl
 
     xhr.onload = ->
       if xhr.status isnt 200
