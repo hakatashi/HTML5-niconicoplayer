@@ -50,8 +50,6 @@ HTML5Niconicoplayer = (options) ->
   comments = null
 
   player.ready ->
-    player.play()
-
     # Request comment
     xhr = new XMLHttpRequest()
     xhr.overrideMimeType 'text/xml'
@@ -147,8 +145,8 @@ HTML5Niconicoplayer = (options) ->
         vpos = player.currentTime()
         videoWidth = videoEl.offsetWidth
 
-        if vpos - settings.commentPreTime < chat.vpos / 100 < vpos + settings.commentPostTime
-          scrollTime = (vpos + settings.commentPostTime) - chat.vpos / 100
+        if vpos - settings.commentPostTime < chat.vpos / 100 < vpos + settings.commentPreTime
+          scrollTime = (vpos + settings.commentPreTime) - chat.vpos / 100
 
           commentEl = document.createElement 'span'
           commentEl.className = 'vjs-niconico-comment'
@@ -189,8 +187,7 @@ HTML5Niconicoplayer = (options) ->
           commentEl.style.left = commentOffset + 'px'
           lineEndTimes[index] = chat.vpos / 100 + settings.commentPostTime
 
-        if chat.vpos / 100 < vpos + settings.commentPostTime
-          console.log layoutedComment, chatIndex
+        if chat.vpos / 100 < vpos + settings.commentPreTime
           layoutedComment = Math.max layoutedComment, chatIndex
 
       layoutComments = ->
@@ -204,7 +201,6 @@ HTML5Niconicoplayer = (options) ->
           layoutComment chat, index
 
       updateComment = ->
-        console.log layoutedComment
         vpos = player.currentTime()
         videoWidth = videoEl.offsetWidth
 
@@ -212,10 +208,10 @@ HTML5Niconicoplayer = (options) ->
 
         for commentEl in commentAreaEl.childNodes
           chat = chats[commentEl.dataset.index]
-          if chat.vpos / 100 < vpos - settings.commentPreTime
+          if chat.vpos / 100 < vpos - settings.commentPostTime
             removalPendingElements.push commentEl
           else
-            scrollTime = (vpos + settings.commentPostTime) - chat.vpos / 100
+            scrollTime = (vpos + settings.commentPreTime) - chat.vpos / 100
             commentWidth = commentEl.offsetWidth
             scrollPath = videoWidth + commentWidth
 
@@ -227,8 +223,10 @@ HTML5Niconicoplayer = (options) ->
         for element in removalPendingElements
           element.parentNode.removeChild element
 
-        for chat, index in chats[layoutedComment + 1 ...]
-          layoutComment chat, layoutedComment + 1 + index
+        offset = layoutedComment
+
+        for chat, index in chats[offset + 1 ...]
+          layoutComment chat, offset + 1 + index
 
       player.on 'seeked', ->
         layoutComments()
