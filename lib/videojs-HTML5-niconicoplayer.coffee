@@ -138,12 +138,15 @@ HTML5Niconicoplayer = (options) ->
         if not player.paused()
           seconds = player.currentTime()
           scrollCommentTime seconds
-          updateComment()
       , 100
+
+      setInterval ->
+        updateComment()
+      , 33
 
       layoutComment = (chat, chatIndex) ->
         vpos = player.currentTime()
-        videoWidth = videoEl.offsetWidth
+        videoWidth = player.width()
 
         if vpos - settings.commentPostTime < chat.vpos / 100 < vpos + settings.commentPreTime
           scrollTime = (vpos + settings.commentPreTime) - chat.vpos / 100
@@ -183,6 +186,7 @@ HTML5Niconicoplayer = (options) ->
 
           commentEl.dataset.line = line
           commentEl.dataset.index = chatIndex
+          commentEl.dataset.width = commentWidth
           commentEl.style.top = line * settings.commentHeight + 'px'
           commentEl.style.left = commentOffset + 'px'
           lineEndTimes[index] = chat.vpos / 100 + settings.commentPostTime
@@ -202,7 +206,7 @@ HTML5Niconicoplayer = (options) ->
 
       updateComment = ->
         vpos = player.currentTime()
-        videoWidth = videoEl.offsetWidth
+        videoWidth = player.width()
 
         removalPendingElements = []
 
@@ -212,7 +216,7 @@ HTML5Niconicoplayer = (options) ->
             removalPendingElements.push commentEl
           else
             scrollTime = (vpos + settings.commentPreTime) - chat.vpos / 100
-            commentWidth = commentEl.offsetWidth
+            commentWidth = parseInt commentEl.dataset.width
             scrollPath = videoWidth + commentWidth
 
             scrollOffset = scrollPath / settings.commentTime * scrollTime
