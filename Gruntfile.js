@@ -65,6 +65,21 @@ module.exports = function(grunt) {
         files: '<%= jshint.test.src %>',
         tasks: ['jshint:test', 'qunit']
       }
+    },
+    browserify: {
+      build: {
+        src: 'lib/videojs-HTML5-niconicoplayer.coffee',
+        dest: 'lib/videojs-HTML5-niconicoplayer.js',
+      },
+      options: {
+        transform: ['coffeeify']
+      }
+    },
+    less: {
+      example: {
+        src: 'example.less',
+        dest: 'example.css'
+      }
     }
   });
 
@@ -74,10 +89,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-browserify');
 
   grunt.registerTask('default',
                      ['clean',
-                      'jshint',
+                      'browserify',
+                      'less',
                       'qunit',
                       'concat',
                       'uglify']);

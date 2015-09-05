@@ -1,0 +1,72 @@
+@video-height: 300px;
+@video-width: 600px;
+
+@comment-width: 200px;
+
+.video-js {
+	float: left;
+}
+
+.micro-clearfix {
+	&:before, &:after {
+		content: "";
+		display: table;
+	}
+	&:after {
+		clear:both;
+	}
+	zoom:1;
+}
+
+.wrapper {
+	.micro-clearfix;
+	width: @video-width + @comment-width;
+	height: @video-height;
+
+	margin: 40px auto;
+}
+
+.vjs {
+	&-commentlist {
+		width: @comment-width;
+		height: @video-height;
+
+		float: left;
+
+		overflow-y: scroll;
+	}
+
+	@comment-height: 20px;
+
+	&-comment {
+		width: 100%;
+		height: @comment-height;
+
+		font-size: 10px;
+
+		.micro-clearfix;
+
+		background: white;
+
+		&:nth-child(even) {
+			background: #EEE;
+		}
+
+		& > * {
+			height: @comment-height;
+			line-height: @comment-height;
+			float: left;
+			word-break: break-all;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+
+		&-text {
+			width: 70%;
+		}
+
+		&-time {
+			width: 30%;
+		}
+	}
+}

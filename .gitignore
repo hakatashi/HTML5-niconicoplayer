@@ -1,5 +1,9 @@
 .DS_Store
 *.log
+*.mp4
+*.xml
+*.css
+*.js
 node_modules/
 dist/
 *~
