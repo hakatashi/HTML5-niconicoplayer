@@ -25,7 +25,8 @@ HTML5Niconicoplayer = (options) ->
     commentListEl = document.querySelector settings.commentList
 
   # Prepare elements
-  videoEl = player.contentEl()
+  contentEl = player.contentEl()
+  videoEl = contentEl.querySelector 'video'
   trackEls = videoEl.querySelectorAll 'track'
 
   # Extract comment elements
@@ -51,6 +52,13 @@ HTML5Niconicoplayer = (options) ->
     xhr.overrideMimeType 'text/xml'
     xhr.open 'GET', commentFile, true
     xhr.send()
+
+    commentAreaEl = document.createElement 'div'
+    commentAreaEl.className = 'vjs-niconico-comment-area'
+
+    videoEl.parentNode.insertBefore commentAreaEl, videoEl.nextSibling
+
+    console.log commentAreaEl
 
     xhr.onload = ->
       if xhr.status isnt 200
@@ -123,6 +131,9 @@ HTML5Niconicoplayer = (options) ->
           seconds = player.currentTime()
           scrollCommentTime seconds
       , 100
+
+      player.on 'seeked', ->
+        layoutComment()
 
   return player
 
