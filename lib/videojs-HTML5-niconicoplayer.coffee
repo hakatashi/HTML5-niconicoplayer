@@ -65,6 +65,9 @@ HTML5Niconicoplayer = (options) ->
     # Array of time currently layouted last comment disappears for each line
     lineEndTimes = (0 for i in [0...lineLength])
 
+    layoutedComment = 0
+    layoutedFixedComment = 0
+
     videoEl.parentNode.insertBefore commentAreaEl, videoEl.nextSibling
 
     xhr.onload = ->
@@ -137,50 +140,102 @@ HTML5Niconicoplayer = (options) ->
         if not player.paused()
           seconds = player.currentTime()
           scrollCommentTime seconds
+          updateComment()
       , 100
 
-      layoutComment = ->
-        commentAreaEl.innerHTML = ''
-        lineEndTimes = (0 for i in [0...lineLength])
-
+      layoutComment = (chat, chatIndex) ->
         vpos = player.currentTime()
         videoWidth = videoEl.offsetWidth
 
-        for chat in chats
-          if vpos - settings.commentPostTime < chat.vpos / 100 < vpos + settings.commentPreTime
-            scrollTime = chat.vpos / 100 - (vpos - settings.commentPostTime)
+        if vpos - settings.commentPreTime < chat.vpos / 100 < vpos + settings.commentPostTime
+          scrollTime = (vpos + settings.commentPostTime) - chat.vpos / 100
 
-            commentEl = document.createElement 'span'
-            commentEl.className = 'vjs-niconico-comment'
-            commentEl.textContent = chat.text
+          commentEl = document.createElement 'span'
+          commentEl.className = 'vjs-niconico-comment'
+          commentEl.textContent = chat.text
 
-            # Append comment to measure width
-            commentAreaEl.appendChild commentEl
+          # Append comment to measure width
+          commentAreaEl.appendChild commentEl
 
+          commentWidth = commentEl.offsetWidth
+          scrollPath = videoWidth + commentWidth
+
+          scrollOffset = scrollPath / settings.commentTime * scrollTime
+          commentOffset = videoWidth - scrollOffset
+
+          # Time when current comment touch to the left side of video
+          disappearTime = chat.vpos / 100 - settings.commentPreTime + settings.commentTime / scrollPath * videoWidth
+
+          paddingTimes = []
+          line = null
+
+          for time, index in lineEndTimes
+            if time <= disappearTime
+              line = index
+              break
+            else
+              paddingTimes[index] = time - disappearTime
+
+          if line is null
+            minPadding = Infinity
+            for time, index in paddingTimes
+              if minPadding > time
+                minPadding = time
+                line = index
+
+          commentEl.dataset.line = line
+          commentEl.dataset.index = chatIndex
+          commentEl.style.top = line * settings.commentHeight + 'px'
+          commentEl.style.left = commentOffset + 'px'
+          lineEndTimes[index] = chat.vpos / 100 + settings.commentPostTime
+
+        if chat.vpos / 100 < vpos + settings.commentPostTime
+          console.log layoutedComment, chatIndex
+          layoutedComment = Math.max layoutedComment, chatIndex
+
+      layoutComments = ->
+        commentAreaEl.innerHTML = ''
+        lineEndTimes = (0 for i in [0...lineLength])
+
+        layoutedComment = 0
+        layoutedFixedComment = 0
+
+        for chat, index in chats
+          layoutComment chat, index
+
+      updateComment = ->
+        console.log layoutedComment
+        vpos = player.currentTime()
+        videoWidth = videoEl.offsetWidth
+
+        removalPendingElements = []
+
+        for commentEl in commentAreaEl.childNodes
+          chat = chats[commentEl.dataset.index]
+          if chat.vpos / 100 < vpos - settings.commentPreTime
+            removalPendingElements.push commentEl
+          else
+            scrollTime = (vpos + settings.commentPostTime) - chat.vpos / 100
             commentWidth = commentEl.offsetWidth
             scrollPath = videoWidth + commentWidth
 
             scrollOffset = scrollPath / settings.commentTime * scrollTime
             commentOffset = videoWidth - scrollOffset
 
-            # Time when current comment touch to the left side of video
-            disappearTime = chat.vpos / 100 - settings.commentPreTime + settings.commentTime / scrollPath * videoWidth
+            commentEl.style.left = commentOffset + 'px'
 
-            for time, index in lineEndTimes
-              if time <= disappearTime
-                commentEl.dataset.line = index
-                commentEl.style.top = index * settings.commentHeight + 'px'
-                commentEl.style.left = commentOffset + 'px'
-                lineEndTimes[index] = chat.vpos / 100 + settings.commentPostTime
-                break
+        for element in removalPendingElements
+          element.parentNode.removeChild element
 
-            if not commentEl.dataset.line?
-              commentEl.parentNode.removeChild commentEl
-
-      window.layoutComment = layoutComment
+        for chat, index in chats[layoutedComment + 1 ...]
+          layoutComment chat, layoutedComment + 1 + index
 
       player.on 'seeked', ->
-        layoutComment()
+        layoutComments()
+
+      layoutComments()
+      window.layoutComments = layoutComments
+      window.updateComment = updateComment
 
   return player
 
