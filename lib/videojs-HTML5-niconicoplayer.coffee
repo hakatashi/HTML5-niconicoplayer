@@ -204,7 +204,7 @@ HTML5Niconicoplayer = (options) ->
           commentEl.style.left = commentOffset + 'px'
 
           for color in colors
-            if chat.styles.indexOf(color) isnt -1
+            if color in chat.styles
               commentEl.className += ' ' + color
 
           lineEndTimes[index] = chat.vpos / 100 + settings.commentPostTime
