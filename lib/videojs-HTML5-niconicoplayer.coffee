@@ -12,6 +12,19 @@ defaults =
   commentPreTime: 1
   commentHeight: 20
 
+colors = [
+  'white'
+  'red'
+  'pink'
+  'orange'
+  'yellow'
+  'green'
+  'cyan'
+  'blue'
+  'purple'
+  'black'
+]
+
 HTML5Niconicoplayer = undefined
 
 ###*
@@ -189,6 +202,11 @@ HTML5Niconicoplayer = (options) ->
           commentEl.dataset.width = commentWidth
           commentEl.style.top = line * settings.commentHeight + 'px'
           commentEl.style.left = commentOffset + 'px'
+
+          for color in colors
+            if chat.styles.indexOf(color) isnt -1
+              commentEl.className += ' ' + color
+
           lineEndTimes[index] = chat.vpos / 100 + settings.commentPostTime
 
         if chat.vpos / 100 < vpos + settings.commentPreTime
