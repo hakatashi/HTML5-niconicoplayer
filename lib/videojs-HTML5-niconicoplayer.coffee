@@ -322,6 +322,8 @@ HTML5Niconicoplayer = (options) ->
         layoutedComment = 0
         layoutedFixedComment = 0
 
+        fixedComments = []
+
         for chat, index in chats
           if 'ue' in chat.styles or 'shita' in chat.styles
             layoutFixedComment chat, index
