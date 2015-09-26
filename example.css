@@ -1,0 +1,118 @@
+.video-js {
+  float: left;
+}
+.micro-clearfix {
+  zoom: 1;
+}
+.micro-clearfix:before,
+.micro-clearfix:after {
+  content: "";
+  display: table;
+}
+.micro-clearfix:after {
+  clear: both;
+}
+.wrapper {
+  zoom: 1;
+  width: 900px;
+  height: 300px;
+  margin: 40px auto;
+}
+.wrapper:before,
+.wrapper:after {
+  content: "";
+  display: table;
+}
+.wrapper:after {
+  clear: both;
+}
+.vjs-niconico-comment-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.vjs-niconico-comment {
+  position: absolute;
+  display: inline-block;
+  height: 20px;
+  line-height: 20px;
+  font-size: 20px;
+  white-space: nowrap;
+  color: white;
+  text-shadow: -1px -1px #000000, 1px -1px #000000, -1px 1px #000000, 1px 1px #000000;
+  opacity: 0.6;
+}
+.vjs-niconico-comment.fixed {
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+.vjs-niconico-comment.red {
+  color: red;
+}
+.vjs-niconico-comment.pink {
+  color: pink;
+}
+.vjs-niconico-comment.orange {
+  color: orange;
+}
+.vjs-niconico-comment.yellow {
+  color: yellow;
+}
+.vjs-niconico-comment.green {
+  color: green;
+}
+.vjs-niconico-comment.cyan {
+  color: cyan;
+}
+.vjs-niconico-comment.blue {
+  color: blue;
+}
+.vjs-niconico-comment.purple {
+  color: purple;
+}
+.vjs-niconico-comment.black {
+  color: black;
+}
+.vjs-commentlist {
+  width: 300px;
+  height: 300px;
+  float: left;
+  overflow-y: scroll;
+}
+.vjs-comment {
+  width: 100%;
+  height: 20px;
+  font-size: 10px;
+  zoom: 1;
+  background: white;
+}
+.vjs-comment:before,
+.vjs-comment:after {
+  content: "";
+  display: table;
+}
+.vjs-comment:after {
+  clear: both;
+}
+.vjs-comment:nth-child(even) {
+  background: #EEE;
+}
+.vjs-comment > * {
+  height: 20px;
+  line-height: 20px;
+  float: left;
+  word-break: break-all;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.vjs-comment-text {
+  width: 85%;
+}
+.vjs-comment-time {
+  width: 15%;
+}
