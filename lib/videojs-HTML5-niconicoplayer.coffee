@@ -11,6 +11,7 @@ defaults =
   commentTime: 4
   commentPreTime: 1
   commentHeight: 20
+  commentFile: false
 
 colors = [
   'white'
@@ -44,21 +45,25 @@ HTML5Niconicoplayer = (options) ->
 
   # Prepare elements
   contentEl = player.contentEl()
-  videoEl = contentEl.querySelector 'video'
-  trackEls = videoEl.querySelectorAll 'track'
+  videoEl = contentEl.querySelector('video') or contentEl.querySelector('iframe')
 
-  # Extract comment elements
-  commentEls = []
+  if settings.commentFile
+    commentFile = settings.commentFile
+  else
+    trackEls = videoEl.querySelectorAll 'track'
 
-  for trackEl in trackEls
-    # TODO: IE compat
-    if trackEl.classList.contains 'vjs-niconico-comment-file'
-      commentEls.push trackEl
+    # Extract comment elements
+    commentEls = []
 
-  if commentEls.length is 0
-    throw new Error 'Niconico Comment file not found'
+    for trackEl in trackEls
+      # TODO: IE compat
+      if trackEl.classList.contains 'vjs-niconico-comment-file'
+        commentEls.push trackEl
 
-  commentFile = commentEls[0].getAttribute 'src'
+    if commentEls.length is 0
+      throw new Error 'Niconico Comment file not found'
+
+    commentFile = commentEls[0].getAttribute 'src'
 
   comments = null
 
