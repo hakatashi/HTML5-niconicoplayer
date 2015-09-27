@@ -4,6 +4,9 @@
   "author": "Koki Takahashi",
   "description": "Video.js plugin to cope with niconico comment",
   "license": "MIT",
+  "scripts": {
+    "test": "node_modules/.bin/gulp"
+  },
   "keywords": [
     "videojs",
     "html5",
