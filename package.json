@@ -13,6 +13,7 @@
   ],
   "dependencies": {},
   "devDependencies": {
+    "coffee-script": "^1.10.0",
     "coffeeify": "^1.1.0",
     "core-js": "^1.1.4",
     "grunt-browserify": "^4.0.1",
@@ -24,6 +25,7 @@
     "grunt-contrib-qunit": "^0.2",
     "grunt-contrib-uglify": "^0.2",
     "grunt-contrib-watch": "^0.4",
+    "gulp": "^3.9.0",
     "qunitjs": "^1.12",
     "video.js": "^4.5"
   },
