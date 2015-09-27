@@ -1,4 +1,5 @@
-###! videojs-HTML5-niconicoplayer - v0.0.0 - 2015-1-19
+###!
+# videojs-HTML5-niconicoplayer - v0.0.0 - 2015-1-19
 # Copyright (c) 2015 Koki Takahashi
 # Licensed under the MIT license.
 ###
