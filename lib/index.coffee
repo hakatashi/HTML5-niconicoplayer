@@ -1,6 +1,7 @@
 find = require 'core-js/library/fn/array/find'
 findIndex = require 'core-js/library/fn/array/find-index'
 
+# Default options
 defaults =
   commentList: false
   commentTime: 4
@@ -21,8 +22,6 @@ colors = [
   'black'
 ]
 
-HTML5Niconicoplayer = undefined
-
 ###*
 # Initialize the plugin.
 # @param options (optional) {object} configuration for the plugin
@@ -35,6 +34,7 @@ HTML5Niconicoplayer = (options) ->
 
   commentLoaded = no
 
+  # Get comment list element
   if settings.commentList
     commentListEl = document.querySelector settings.commentList
 
