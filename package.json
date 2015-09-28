@@ -21,6 +21,7 @@
     "core-js": "^1.1.4",
     "gulp": "^3.9.0",
     "gulp-browserify": "^0.5.1",
+    "gulp-coffee": "^2.3.1",
     "gulp-header": "^1.7.1",
     "gulp-load-plugins": "^0.10.0",
     "gulp-qunit": "^1.2.1",
