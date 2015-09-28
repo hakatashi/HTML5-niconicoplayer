@@ -5,7 +5,7 @@
   "description": "Video.js plugin to cope with niconico comment",
   "license": "MIT",
   "scripts": {
-    "test": "node_modules/.bin/gulp"
+    "test": "gulp"
   },
   "keywords": [
     "videojs",
@@ -34,5 +34,17 @@
   },
   "peerDependencies": {
     "video.js": "^4.5"
-  }
+  },
+  "main": "lib/index.coffee",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hakatashi/HTML5-niconicoplayer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hakatashi/HTML5-niconicoplayer/issues"
+  },
+  "homepage": "https://github.com/hakatashi/HTML5-niconicoplayer#readme"
 }
