@@ -1,5 +1,10 @@
 # Video.js Html5 Niconicoplayer
 
+[travis-image]: https://travis-ci.org/hakatashi/HTML5-niconicoplayer.svg?branch=master
+[travis-url]: https://travis-ci.org/hakatashi/HTML5-niconicoplayer
+
+[![Build Status][travis-image]][travis-url]
+
 Video.js plugin to cope with niconico comment
 
 ## Getting Started
