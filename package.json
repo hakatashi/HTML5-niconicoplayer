@@ -27,6 +27,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.5.2",
     "gulp-uglify": "^1.4.1",
+    "qunitjs": "^1.19.0",
     "video.js": "^4.5"
   },
   "peerDependencies": {
