@@ -27,7 +27,7 @@ gulp.task 'task-dist', ->
 	.pipe libs.rename 'HTML5-niconicoplayer.js'
 	.pipe gulp.dest './dist'
 	.pipe libs.sourcemaps.init loadMaps: true
-	.pipe libs.uglify()
+	.pipe libs.uglify preserveComments: 'license'
 	.pipe libs.rename (path) -> path.extname = '.min.js'
 	.pipe libs.sourcemaps.write './'
 	.pipe gulp.dest './dist'
