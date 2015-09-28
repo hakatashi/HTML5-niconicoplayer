@@ -2,7 +2,6 @@
 *.log
 *.mp4
 *.css
-*.js
 node_modules/
-dist/
+build/
 *~
