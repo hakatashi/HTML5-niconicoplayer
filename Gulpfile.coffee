@@ -34,4 +34,8 @@ gulp.task 'task-dist', ->
 
 gulp.task 'dist', ['build', 'task-dist']
 
-gulp.task 'default', ['build']
+gulp.task 'test', ->
+	gulp.src 'test/index.html'
+	.pipe libs.qunit()
+
+gulp.task 'default', ['build', 'test']
