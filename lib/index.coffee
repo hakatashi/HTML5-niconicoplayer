@@ -1,9 +1,3 @@
-###!
-# videojs-HTML5-niconicoplayer - v0.0.0 - 2015-1-19
-# Copyright (c) 2015 Koki Takahashi
-# Licensed under the MIT license.
-###
-
 find = require 'core-js/library/fn/array/find'
 findIndex = require 'core-js/library/fn/array/find-index'
 

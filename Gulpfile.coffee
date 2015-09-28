@@ -4,7 +4,7 @@ pkg = require './package.json'
 
 banner = """
 	/**
-	 * <%= pkg.name %> - <%= pkg.description %>\n' +
+	 * <%= pkg.name %> - <%= pkg.description %>
 	 * @version v<%= pkg.version %>
 	 * @link <%= pkg.homepage %>
 	 * @license <%= pkg.license %>
