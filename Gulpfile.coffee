@@ -21,7 +21,7 @@ gulp.task 'build', ->
 	.pipe libs.rename 'index.js'
 	.pipe gulp.dest './build'
 
-gulp.task 'task-dist', ->
+gulp.task 'dist', ['build'], ->
 	gulp.src 'build/index.js'
 	.pipe libs.header banner, pkg: pkg
 	.pipe libs.rename 'HTML5-niconicoplayer.js'
@@ -32,10 +32,8 @@ gulp.task 'task-dist', ->
 	.pipe libs.sourcemaps.write './'
 	.pipe gulp.dest './dist'
 
-gulp.task 'dist', ['build', 'task-dist']
-
-gulp.task 'test', ->
+gulp.task 'test', ['build'], ->
 	gulp.src 'test/index.html'
 	.pipe libs.qunit()
 
-gulp.task 'default', ['build', 'test']
+gulp.task 'default', ['test']
