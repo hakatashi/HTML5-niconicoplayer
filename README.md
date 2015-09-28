@@ -28,12 +28,6 @@ There's also a [working example](example.html) of the plugin you can check out i
 You may pass in an options object to the plugin upon initialization. This
 object may contain any of the following properties:
 
-  commentList: false
-  commentTime: 4
-  commentPreTime: 1
-  commentHeight: 20
-  commentFile: false
-
 #### commentList
 
 Type: `string` | `boolean`
@@ -68,11 +62,11 @@ Note: Any other style information can be specified by custom CSS.
 
 #### commentFile
 
-Type: `string`
+Type: `string` | `boolean`
 Default: false
 
 The file path to the comment file. Set false to enable automatic file detection from `<track>`.
 
 ## Release History
 
- - 0.1.0: Initial release
+ - 0.0.1: First applicable release version
