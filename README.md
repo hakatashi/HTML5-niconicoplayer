@@ -1,5 +1,7 @@
 # Video.js Html5 Niconicoplayer
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/hakatashi/HTML5-niconicoplayer.svg)](https://greenkeeper.io/)
+
 [travis-image]: https://travis-ci.org/hakatashi/HTML5-niconicoplayer.svg?branch=master
 [travis-url]: https://travis-ci.org/hakatashi/HTML5-niconicoplayer
 
